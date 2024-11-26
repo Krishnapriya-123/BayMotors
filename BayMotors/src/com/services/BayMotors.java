@@ -25,7 +25,7 @@ public class BayMotors {
 
             System.out.print("Select Role: 1 - Manager, 2 - Mechanic: ");
             roleId = sc.nextInt();
-            sc.nextLine(); // Consume the leftover newline
+            sc.nextLine(); 
 
             if (roleId != 1 && roleId != 2) {
                 System.out.println("Invalid Role. Please select from the given Roles.");
