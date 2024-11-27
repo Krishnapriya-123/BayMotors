@@ -1,6 +1,7 @@
-package com.services;
+package com.baymotors.main;
+
 import java.util.Scanner;
-import com.dao.EmployeeDao;
+import com.baymotors.dao.EmployeeDao;
 
 public class BayMotors {
 
