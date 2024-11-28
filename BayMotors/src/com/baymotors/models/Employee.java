@@ -126,7 +126,10 @@ public abstract class Employee {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-
-
+	
+	@Override
+	public String toString() {
+		return "ID: " + id + " FirstName: " + firstName + " LastName: " + lastName + " MobileNumber: " + mobileNumber;
+	}
 	
 }
