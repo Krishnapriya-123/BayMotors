@@ -1,6 +1,7 @@
 package com.baymotors.models;
 
 import java.util.Date;
+import com.baymotors.util.Util;
 
 public class Customer {
     private int id;
@@ -97,7 +98,11 @@ public class Customer {
 
     @Override
 	public String toString() {
-		return "ID: " + id + " FirstName: " + firstName + " LastName: " + lastName + " MobileNumber: " + mobileNumber + " IsRegistered: " + isRegistered + " registrationDate: ";
+    	String registered_date = null;
+    	if (registrationDate != null) {
+    		registered_date = Util.formatDate(registrationDate);
+    	}
+		return "ID: " + id + " FirstName: " + firstName + " LastName: " + lastName + " MobileNumber: " + mobileNumber + " IsRegistered: " + isRegistered + " registrationDate: " + registered_date;
 	}
 }
 

@@ -83,30 +83,33 @@ public class BayMotors {
 
     
     public static void displayManagerOptions() {
-	    System.out.println("Select an Operation to perform ");
-	    System.out.println("1. List Mechanics ");
-	    System.out.println("2. Add Mechanic ");
-	    System.out.println("3. List Customers ");
-	    System.out.println("4. Add Customer ");
-	    System.out.println("5. Log Vehicle ");
-	    System.out.println("6. List Tasks ");
-	    System.out.println("7. Add Task ");
-	    System.out.println("8. Notify Customers ");
-	    System.out.println("9. List Suppliers ");
-	    System.out.println("10. Add Supplier ");
-	    System.out.println("11. List Manufacturers ");
-	    System.out.println("12. Add Manufacturer ");
-	    System.out.println("13. LogOut");
-
 	    Scanner sc = new Scanner(System.in);
 
 	    while (true) { // Loop to allow multiple operations until logout
+	    	System.out.println("\nSelect an Operation to perform ");
+		    System.out.println("1. List Mechanics ");
+		    System.out.println("2. Add Mechanic ");
+		    System.out.println("3. List Customers ");
+		    System.out.println("4. Add Customer ");
+		    System.out.println("5. Log Vehicle ");
+		    System.out.println("6. List Tasks ");
+		    System.out.println("7. Add Task ");
+		    System.out.println("8. Notify Customers ");
+		    System.out.println("9. List Suppliers ");
+		    System.out.println("10. Add Supplier ");
+		    System.out.println("11. List Manufacturers ");
+		    System.out.println("12. Add Manufacturer ");
+		    System.out.println("13. LogOut \n");
+
 	        System.out.print("Enter your choice: ");
 	        int userOption = sc.nextInt();
-
+	        
+	        // Flush the leftover newline
+	        sc.nextLine(); // Consume the leftover newline
+	        
 	        switch (userOption) {
 	            case 1:
-	                System.out.println("List of Mechanics");
+	                System.out.println("\nList of Mechanics\n");
 	                // Logic to list mechanics
 	                List<Employee> employees = EmployeeService.listEmployees();
 	                System.out.println("\n--- Mechanics ---");
@@ -116,10 +119,9 @@ public class BayMotors {
 	                break;
 
 	            case 2:
-	                
 	            	// Logic to add a mechanic
 	            	System.out.println("Enter Mechanic Details: ");
-	            	System.out.println("FirstName: ");
+	            	System.out.print("FirstName: ");
 	            	String firstName = sc.nextLine();
 	            	System.out.print("LastName: ");
 	            	String lastName = sc.nextLine();
@@ -143,15 +145,14 @@ public class BayMotors {
 	            	// Add the mechanic to the repository
 	            	EmployeeService.addEmployee(emp);
 
-	            	System.out.println("Mechanic added successfully");
-
+	            	System.out.println("Mechanic added successfully\n\n");
 	                break;
 
 	            case 3:
-	            	 System.out.println("List of Customers");
 	            	// Logic to list customers
+	            	 System.out.println("\nList of Customers\n");
 	            	 List<Customer> customers = CustomerService.listCustomers();
-	            	 System.out.println("\n--- Customers ---");
+	            	 System.out.println("--- Customers ---");
 	            	 for(Customer customer:customers) {
 		                	System.out.println(customer);
 		                }
@@ -159,25 +160,23 @@ public class BayMotors {
 	                break;
 
 	            case 4:
-	            	
-
+	            	// Logic to add a Customer
 	            	System.out.println("Enter Customer Details: ");
-	            	
-	            	System.out.println("FirstName: ");
+	            	System.out.print("FirstName: ");
 	            	String firstName2 = sc.nextLine();
-	            	System.out.println("LastName: ");
+	            	System.out.print("LastName: ");
 	            	String lastName2 = sc.nextLine();
-	            	System.out.println("Email: ");
+	            	System.out.print("Email: ");
 	            	String email2 = sc.nextLine();
-	            	System.out.println("MobileNumber: ");
+	            	System.out.print("MobileNumber: ");
 	            	String mobileNumber2 = sc.nextLine();
-	            	System.out.println("Address: ");
+	            	System.out.print("Address: ");
 	            	String address2 = sc.nextLine();
 	            	
-	            	 System.out.println("IsRegistered (true/false): ");
+	            	 System.out.print("IsRegistered (true/false): ");
 	                 boolean isRegistered = Boolean.parseBoolean(sc.nextLine()); // Parse string to boolean
 	                 
-	                 System.out.println("RegistrationDate (yyyy-MM-dd): ");
+	                 System.out.print("RegistrationDate (yyyy-MM-dd): ");
 	                 String registrationDateStr = sc.nextLine();
 	                 
 	                 // Parse the registration date string to a Date object
@@ -197,10 +196,7 @@ public class BayMotors {
 
 	            	// Add the mechanic to the repository
 	            	CustomerService.addCustomer(cus);
-	            
-	            	
 	                System.out.println("Customer added: " + cus);
-	                // Logic to add a customer
 	                break;
 
 	            case 5:
@@ -210,9 +206,9 @@ public class BayMotors {
 	                break;
 
 	            case 6:
-	                System.out.println("List of Tasks");
-	                // Logic to list tasks
-	               
+	            	// Logic to list tasks
+	                System.out.println("\nList of Tasks\n");
+	                
 	                List<Task> tasks = TaskService.listTasks();
 	                System.out.println("\n--- Tasks ---");
 	            	for(Task task:tasks) {
@@ -221,34 +217,40 @@ public class BayMotors {
 	                break;
 
 	            case 7:
+	            	// Logic to add a task
 	                System.out.println("Task added");
-	                // Logic to add a task
+	                
 	                
 	                break;
 
 	            case 8:
+	            	// Logic to notify customers
 	                System.out.println("Customers notified");
-	                // Logic to notify customers
+	                
 	                break;
 
 	            case 9:
-	                System.out.println("List of Suppliers");
-	                // Logic to list suppliers
+	            	// Logic to list suppliers
+	            	System.out.println("List of Suppliers");
+	                
 	                break;
 
 	            case 10:
+	            	// Logic to add a supplier
 	                System.out.println("Supplier added");
-	                // Logic to add a supplier
+	                
 	                break;
 
 	            case 11:
+	            	// Logic to list manufacturers
 	                System.out.println("List of Manufacturers");
-	                // Logic to list manufacturers
+	                
 	                break;
 
 	            case 12:
+	            	// Logic to add a manufacturer
 	                System.out.println("Manufacturer added");
-	                // Logic to add a manufacturer
+	                
 	                break;
 
 	            case 13:
