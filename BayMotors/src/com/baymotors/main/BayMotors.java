@@ -1,5 +1,8 @@
 package com.baymotors.main;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.List;
 
@@ -8,6 +11,9 @@ import com.baymotors.dao.EmployeeDao;
 import com.baymotors.services.EmployeeService;
 import com.baymotors.models.Employee;
 import com.baymotors.models.Mechanic;
+import com.baymotors.dao.CustomerDao;
+import com.baymotors.services.CustomerService;
+import com.baymotors.models.Customer;
 
 public class BayMotors {
 
@@ -139,12 +145,58 @@ public class BayMotors {
 	                break;
 
 	            case 3:
-	                System.out.println("List of Customers");
-	                // Logic to list customers
+	            	 System.out.println("List of Customers");
+	            	// Logic to list customers
+	            	 List<Customer> customers = CustomerService.listCustomers();
+	            	 System.out.println("\n--- Customers ---");
+	            	 for(Customer customer:customers) {
+		                	System.out.println(customer);
+		                }
+	                
 	                break;
 
 	            case 4:
-	                System.out.println("Customer added");
+	            	
+
+	            	System.out.println("Enter Customer Details: ");
+	            	
+	            	System.out.println("FirstName: ");
+	            	String firstName2 = sc.nextLine();
+	            	System.out.println("LastName: ");
+	            	String lastName2 = sc.nextLine();
+	            	System.out.println("Email: ");
+	            	String email2 = sc.nextLine();
+	            	System.out.println("MobileNumber: ");
+	            	String mobileNumber2 = sc.nextLine();
+	            	System.out.println("Address: ");
+	            	String address2 = sc.nextLine();
+	            	
+	            	 System.out.println("IsRegistered (true/false): ");
+	                 boolean isRegistered = Boolean.parseBoolean(sc.nextLine()); // Parse string to boolean
+	                 
+	                 System.out.println("RegistrationDate (yyyy-MM-dd): ");
+	                 String registrationDateStr = sc.nextLine();
+	                 
+	                 // Parse the registration date string to a Date object
+	                 Date registrationDate = null;
+	                 try {
+	                     registrationDate = new SimpleDateFormat("yyyy-MM-dd").parse(registrationDateStr);
+	                 } catch (ParseException e) {
+	                     System.out.println("Invalid date format. Please use yyyy-MM-dd.");
+	                     e.printStackTrace();
+	                     return; // Exit the process in case of invalid date input
+	                 }
+	            	// Dynamically generate the next ID
+	            	int nextId2 = EmployeeService.listEmployees().size() + 1;
+	            	
+	            	// Create a Mechanic object
+	            	Customer cus = new Customer(nextId2, firstName2, lastName2, email2, mobileNumber2, address2, isRegistered, registrationDate);
+
+	            	// Add the mechanic to the repository
+	            	CustomerService.addCustomer(cus);
+	            
+	            	
+	                System.out.println("Customer added: " + cus);
 	                // Logic to add a customer
 	                break;
 
