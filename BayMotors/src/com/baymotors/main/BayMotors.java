@@ -14,6 +14,9 @@ import com.baymotors.models.Mechanic;
 import com.baymotors.dao.CustomerDao;
 import com.baymotors.services.CustomerService;
 import com.baymotors.models.Customer;
+import com.baymotors.models.Task;
+import com.baymotors.dao.TaskDao;
+import com.baymotors.services.TaskService;
 
 public class BayMotors {
 
@@ -203,16 +206,24 @@ public class BayMotors {
 	            case 5:
 	                System.out.println("Vehicle logged");
 	                // Logic to log a vehicle
+	                
 	                break;
 
 	            case 6:
 	                System.out.println("List of Tasks");
 	                // Logic to list tasks
+	               
+	                List<Task> tasks = TaskService.listTasks();
+	                System.out.println("\n--- Tasks ---");
+	            	for(Task task:tasks) {
+		                System.out.println(task);
+		                }
 	                break;
 
 	            case 7:
 	                System.out.println("Task added");
 	                // Logic to add a task
+	                
 	                break;
 
 	            case 8:
