@@ -19,6 +19,7 @@ public class Customer {
     // Parameterized constructor
     public Customer(int id, String firstName, String lastName, String email, String mobileNumber,
                     String address, boolean isRegistered, Date registrationDate) {
+    
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -95,17 +96,8 @@ public class Customer {
     }
 
     @Override
-    public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", mobileNumber='" + mobileNumber + '\'' +
-                ", address='" + address + '\'' +
-                ", isRegistered=" + isRegistered +
-                ", registrationDate=" + registrationDate +
-                '}';
-    }
+	public String toString() {
+		return "ID: " + id + " FirstName: " + firstName + " LastName: " + lastName + " MobileNumber: " + mobileNumber + " IsRegistered: " + isRegistered + " registrationDate: ";
+	}
 }
 

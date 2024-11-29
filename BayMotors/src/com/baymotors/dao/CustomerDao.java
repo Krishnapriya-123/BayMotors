@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Date;
 
 import com.baymotors.models.Customer;
+import com.baymotors.models.Employee;
 
 public class CustomerDao {
 	private static final List<Customer> customers = new ArrayList<>();
@@ -23,6 +24,11 @@ public class CustomerDao {
 	public static List<Customer> getAllCustomers() {
         return customers;
     }
+	
+	public static void addCustomer(Customer customer) {
+		customers.add(customer);
+	}
+	
 	
 }
 

@@ -107,17 +107,8 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", vehicleId=" + vehicleId +
-                ", mechanicId=" + mechanicId +
-                ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
-                ", priority='" + priority + '\'' +
-                ", completedAt=" + completedAt +
-                ", rating=" + rating +
-                ", feedback='" + feedback + '\'' +
-                '}';
+    	return "ID: " + id + " VehicleID: " +  vehicleId + " MechanicID: " + mechanicId + " Description: " + description + " Status: " + status + " Priority: " + priority + " CompletedAt: " + completedAt + " Rating: " + rating + " Feedback: " + feedback;
+
     }
 }
 
