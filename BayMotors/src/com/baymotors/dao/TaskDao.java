@@ -25,7 +25,21 @@ public class TaskDao {
                 Status.PENDING, Priority.MEDIUM, null, 0, null));
     }
 
-    public static List<Task> getAllTasks() {
-        return tasks;
+	/**
+     * Retrieve all tasks.
+     *
+     * @return List of tasks.
+     */
+    public static List<Task> getTasks() {
+        return new ArrayList<>(tasks); // Return a copy to prevent external modification
+    }
+    
+    /**
+     * Add a new task to the list.
+     *
+     * @param task The task to add.
+     */
+    public static void addTask(Task task) {
+        tasks.add(task);
     }
 }

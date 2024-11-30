@@ -1,7 +1,5 @@
 package com.baymotors.models;
 
-import java.util.List;
-
 public abstract class Employee {
 	private int id;
     private String username;
@@ -129,7 +127,11 @@ public abstract class Employee {
 	
 	@Override
 	public String toString() {
-		return "ID: " + id + " FirstName: " + firstName + " LastName: " + lastName + " MobileNumber: " + mobileNumber;
+	    return "ID: " + id + " | " +
+	           "FirstName: " + firstName + " | " +
+	           "LastName: " + lastName + " | " +
+	           "MobileNumber: " + mobileNumber;
 	}
+
 	
 }
