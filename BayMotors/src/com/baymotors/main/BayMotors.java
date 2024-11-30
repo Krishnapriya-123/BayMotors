@@ -79,22 +79,27 @@ public class BayMotors {
     }
     
     public static void displayManagerMenu() {
-    	System.out.println("\nSelect an Operation to perform ");
-	    System.out.println("1. List Mechanics ");
-	    System.out.println("2. Add Mechanic ");
-	    System.out.println("3. List Customers ");
-	    System.out.println("4. Add Customer ");
-	    System.out.println("5. List Vehicles");
-	    System.out.println("6. Log Vehicle ");
-	    System.out.println("7. List Tasks ");
-	    System.out.println("8. Add Task ");
-	    System.out.println("9. Notify Customers ");
-	    System.out.println("10. List Suppliers ");
-	    System.out.println("11. Add Supplier ");
-	    System.out.println("12. List Manufacturers ");
-	    System.out.println("13. Add Manufacturer ");
-	    System.out.println("14. LogOut \n");
+        String border = "+---------------------------------------------------------------+";
+        System.out.println("\n" + border);
+        System.out.println("|                   Manager Operations Menu                    |");
+        System.out.println(border);
+        System.out.println("| 1. List Mechanics                                             |");
+        System.out.println("| 2. Add Mechanic                                               |");
+        System.out.println("| 3. List Customers                                             |");
+        System.out.println("| 4. Add Customer                                               |");
+        System.out.println("| 5. List Vehicles                                              |");
+        System.out.println("| 6. Log Vehicle                                                |");
+        System.out.println("| 7. List Tasks                                                 |");
+        System.out.println("| 8. Add Task                                                   |");
+        System.out.println("| 9. Notify Customers                                           |");
+        System.out.println("| 10. List Suppliers                                            |");
+        System.out.println("| 11. Add Supplier                                              |");
+        System.out.println("| 12. List Manufacturers                                        |");
+        System.out.println("| 13. Add Manufacturer                                          |");
+        System.out.println("| 14. LogOut                                                    |");
+        System.out.println(border);
     }
+
     
     public static void displayManagerOptions() {
 	    Scanner sc = new Scanner(System.in);
