@@ -1,22 +1,25 @@
 package com.baymotors.main;
 
+import com.baymotors.services.EmployeeService;
+import com.baymotors.services.CustomerService;
+import com.baymotors.services.TaskService;
+import com.baymotors.services.VehicleService;
+
+import com.baymotors.models.Employee;
+import com.baymotors.models.Mechanic;
+import com.baymotors.models.Customer;
+import com.baymotors.models.Task;
+import com.baymotors.models.Vehicle;
+
+import com.baymotors.constants.Roles;
+import com.baymotors.constants.Priority;
+import com.baymotors.constants.Status;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 import java.util.List;
-
-import com.baymotors.constants.Roles;
-import com.baymotors.dao.EmployeeDao;
-import com.baymotors.services.EmployeeService;
-import com.baymotors.models.Employee;
-import com.baymotors.models.Mechanic;
-import com.baymotors.dao.CustomerDao;
-import com.baymotors.services.CustomerService;
-import com.baymotors.models.Customer;
-import com.baymotors.models.Task;
-import com.baymotors.dao.TaskDao;
-import com.baymotors.services.TaskService;
 
 public class BayMotors {
 
@@ -49,7 +52,7 @@ public class BayMotors {
             }
 
             role = roleId == 1 ? "Manager" : "Mechanic";
-            loginStatus = EmployeeDao.validateEmployee(username, password, role);
+            loginStatus = EmployeeService.validateEmployee(username, password, role);
 
             if (loginStatus) {
                 System.out.println("Logged in successfully!");
@@ -62,11 +65,7 @@ public class BayMotors {
         sc.close();
     }
     
-    /**
-     * Displays the dashboard based on the role of the employee.
-     *
-     * @param role The role of the logged-in employee.
-     */
+    
     public static void getDashboard(String role) {
         System.out.println("\n--- Dashboard ---");
 
@@ -78,40 +77,52 @@ public class BayMotors {
             System.out.println("Invalid role. No dashboard available.");
         }
     }
-
     
-
+    public static void displayManagerMenu() {
+    	System.out.println("\nSelect an Operation to perform ");
+	    System.out.println("1. List Mechanics ");
+	    System.out.println("2. Add Mechanic ");
+	    System.out.println("3. List Customers ");
+	    System.out.println("4. Add Customer ");
+	    System.out.println("5. List Vehicles");
+	    System.out.println("6. Log Vehicle ");
+	    System.out.println("7. List Tasks ");
+	    System.out.println("8. Add Task ");
+	    System.out.println("9. Notify Customers ");
+	    System.out.println("10. List Suppliers ");
+	    System.out.println("11. Add Supplier ");
+	    System.out.println("12. List Manufacturers ");
+	    System.out.println("13. Add Manufacturer ");
+	    System.out.println("14. LogOut \n");
+    }
     
     public static void displayManagerOptions() {
 	    Scanner sc = new Scanner(System.in);
 
 	    while (true) { // Loop to allow multiple operations until logout
-	    	System.out.println("\nSelect an Operation to perform ");
-		    System.out.println("1. List Mechanics ");
-		    System.out.println("2. Add Mechanic ");
-		    System.out.println("3. List Customers ");
-		    System.out.println("4. Add Customer ");
-		    System.out.println("5. Log Vehicle ");
-		    System.out.println("6. List Tasks ");
-		    System.out.println("7. Add Task ");
-		    System.out.println("8. Notify Customers ");
-		    System.out.println("9. List Suppliers ");
-		    System.out.println("10. Add Supplier ");
-		    System.out.println("11. List Manufacturers ");
-		    System.out.println("12. Add Manufacturer ");
-		    System.out.println("13. LogOut \n");
+	    	displayManagerMenu();
+	    	
+	    	int userOption = -1; // Initialize with an invalid option
+	    	boolean validInput = false; // Flag to track if input is valid
 
-	        System.out.print("Enter your choice: ");
-	        int userOption = sc.nextInt();
+	    	while (!validInput) {
+	    	    try {
+	    	        System.out.print("Enter your choice: ");
+	    	        userOption = sc.nextInt(); // Attempt to read an integer
+	    	        sc.nextLine(); // Consume newline character
+	    	        validInput = true; // Set flag to true if input is valid
+	    	    } catch (Exception e) {
+	    	        System.out.println("Invalid input. Please enter a valid number.");
+	    	        sc.nextLine(); // Consume invalid input to avoid infinite loop
+	    	    }
+	    	}
 	        
-	        // Flush the leftover newline
-	        sc.nextLine(); // Consume the leftover newline
 	        
 	        switch (userOption) {
 	            case 1:
 	                System.out.println("\nList of Mechanics\n");
 	                // Logic to list mechanics
-	                List<Employee> employees = EmployeeService.listEmployees();
+	                List<Employee> employees = EmployeeService.getEmployees();
 	                System.out.println("\n--- Mechanics ---");
 	                for(Employee employee:employees) {
 	                	System.out.println(employee);
@@ -137,7 +148,7 @@ public class BayMotors {
 	            	String address = sc.nextLine();
 
 	            	// Dynamically generate the next ID
-	            	int nextId = EmployeeService.listEmployees().size() + 1;
+	            	int nextId = EmployeeService.getEmployees().size() + 1;
 
 	            	// Create a Mechanic object
 	            	Employee emp = new Mechanic(nextId, userName, passWord, firstName, lastName, email, mobileNumber, Roles.MECHANIC, address);
@@ -189,7 +200,7 @@ public class BayMotors {
 	                     return; // Exit the process in case of invalid date input
 	                 }
 	            	// Dynamically generate the next ID
-	            	int nextId2 = EmployeeService.listEmployees().size() + 1;
+	            	int nextId2 = EmployeeService.getEmployees().size() + 1;
 	            	
 	            	// Create a Mechanic object
 	            	Customer cus = new Customer(nextId2, firstName2, lastName2, email2, mobileNumber2, address2, isRegistered, registrationDate);
@@ -198,62 +209,195 @@ public class BayMotors {
 	            	CustomerService.addCustomer(cus);
 	                System.out.println("Customer added: " + cus);
 	                break;
-
+	            
 	            case 5:
-	                System.out.println("Vehicle logged");
-	                // Logic to log a vehicle
-	                
-	                break;
+	            	System.out.println("\n--- List of Vehicles ---");
+	            	List<Vehicle> vehicles = VehicleService.getVehicles();
+	            	for(Vehicle vehicle : vehicles) {
+	            		System.out.println(vehicle);
+	            	}
+	            	break;
 
 	            case 6:
-	            	// Logic to list tasks
-	                System.out.println("\nList of Tasks\n");
-	                
-	                List<Task> tasks = TaskService.listTasks();
-	                System.out.println("\n--- Tasks ---");
-	            	for(Task task:tasks) {
-		                System.out.println(task);
-		                }
+	            	System.out.println("\n--- Log a Vehicle ---");
+
+	                // Take user inputs for vehicle details
+	            	int customerId = -1;
+
+	                // Keep prompting for a valid customerId until one is provided
+	                while (true) {
+	                    // Display a list of existing customers
+	                    System.out.println("Select a Customer ID from the following list:");
+	                    CustomerService.listCustomers().forEach(customer -> {
+	                        System.out.println("Customer ID: " + customer.getId() + ", Name: " + customer.getFirstName() + " " + customer.getLastName());
+	                    });
+
+	                    System.out.print("\nEnter Customer ID: ");
+	                    customerId = sc.nextInt();
+	                    sc.nextLine(); // Consume newline
+
+	                    // Validate the entered customerId
+	                    if (CustomerService.isCustomerExists(customerId)) {
+	                        break; // Exit the loop if the customerId is valid
+	                    } else {
+	                        System.out.println("Invalid Customer ID. Please try again.\n");
+	                    }
+	                }
+
+	                System.out.print("Enter Registration Number: ");
+	                String registrationNumber = sc.nextLine();
+
+	                System.out.print("Enter Make: ");
+	                String make = sc.nextLine();
+
+	                System.out.print("Enter Model: ");
+	                String model = sc.nextLine();
+
+	                System.out.print("Enter Year: ");
+	                int year = sc.nextInt();
+	                sc.nextLine(); // Consume newline
+
+	                System.out.print("Enter Color: ");
+	                String color = sc.nextLine();
+
+	                // Generate the next ID dynamically
+	                int nextVehicleId = VehicleService.getVehicles().size() + 1;
+
+	                // Create a new Vehicle object
+	                Vehicle newVehicle = new Vehicle(nextVehicleId, registrationNumber, make, model, year, color, customerId);
+
+	                // Call the service method to add the vehicle
+	                VehicleService.logVehicle(newVehicle);
+
+	                System.out.println("Vehicle logged successfully!");
 	                break;
 
 	            case 7:
-	            	// Logic to add a task
-	                System.out.println("Task added");
+	            	// Logic to list tasks
+	                System.out.println("\nList of Tasks\n");
 	                
-	                
+	                List<Task> tasks = TaskService.getTasks();
+	                System.out.println("\n--- Tasks ---");
+	            	for(Task task:tasks) {
+		                System.out.println(task);
+		            }
 	                break;
 
 	            case 8:
+	            	// Logic to add a task
+	            	System.out.println("\n--- Add a New Task ---");
+	            	// Select a valid vehicleId
+	                int vehicleId = -1;
+	                while (true) {
+	                    System.out.println("\nSelect a Vehicle ID from the following list:");
+	                    VehicleService.getVehicles().forEach(vehicle -> {
+	                        System.out.println("Vehicle ID: " + vehicle.getId() + ", Registration: " + vehicle.getRegistrationNumber());
+	                    });
+
+	                    System.out.print("Enter Vehicle ID: ");
+	                    vehicleId = sc.nextInt();
+	                    sc.nextLine(); // Consume newline
+
+	                    if (VehicleService.isVehicleExists(vehicleId)) {
+	                        break; // Valid vehicleId
+	                    } else {
+	                        System.out.println("Invalid Vehicle ID. Please try again.\n");
+	                    }
+	                }
+	                
+	             // Select a valid mechanicId
+	                int mechanicId = -1;
+	                while (true) {
+	                    System.out.println("\nSelect a Mechanic ID from the following list:");
+	                    EmployeeService.getEmployees().forEach(mechanic -> {
+	                        System.out.println("Mechanic ID: " + mechanic.getId() + ", Name: " + mechanic.getFirstName() + " " + mechanic.getLastName());
+	                    });
+
+	                    System.out.print("Enter Mechanic ID: ");
+	                    mechanicId = sc.nextInt();
+	                    sc.nextLine(); // Consume newline
+
+	                    if (EmployeeService.isEmployeeExists(mechanicId)) {
+	                        break; // Valid mechanicId
+	                    } else {
+	                        System.out.println("Invalid Mechanic ID. Please try again.\n");
+	                    }
+	                }
+	                
+	             // Collect remaining task details
+	                System.out.print("Enter Task Description: ");
+	                String description = sc.nextLine();
+	                
+	                String priority = null;
+
+	                while (true) {
+	                    System.out.println("Select Task Priority: 1-Low, 2-Medium, 3-High");
+	                    System.out.print("Enter your choice (1-3): ");
+
+	                    int choice = sc.nextInt();
+	                    sc.nextLine(); // Consume newline
+
+	                    switch (choice) {
+	                        case 1:
+	                            priority = Priority.LOW;
+	                            break;
+	                        case 2:
+	                        	priority = Priority.MEDIUM;
+	                        	break;
+	                        case 3:
+	                        	priority = Priority.HIGH;
+	                        	break;
+	                        default:
+	                            System.out.println("Invalid choice. Please select a valid priority (1-3).\n");
+	                    }
+	                    if (priority != null) {
+	                    	break;
+	                    }
+	                }
+
+
+	                // Generate the next Task ID
+	                int taskId = TaskService.getTasks().size() + 1;
+
+	                // Create a new Task object
+	                Task newTask = new Task(taskId, vehicleId, mechanicId, description, Status.PENDING, priority, null, 0, null);
+
+	                // Add the task
+	                TaskService.addTask(newTask);
+
+	                System.out.println("Task created successfully!");
+	                break;
+	            case 9:
 	            	// Logic to notify customers
 	                System.out.println("Customers notified");
 	                
 	                break;
 
-	            case 9:
+	            case 10:
 	            	// Logic to list suppliers
 	            	System.out.println("List of Suppliers");
 	                
 	                break;
 
-	            case 10:
+	            case 11:
 	            	// Logic to add a supplier
 	                System.out.println("Supplier added");
 	                
 	                break;
 
-	            case 11:
+	            case 12:
 	            	// Logic to list manufacturers
 	                System.out.println("List of Manufacturers");
 	                
 	                break;
 
-	            case 12:
+	            case 13:
 	            	// Logic to add a manufacturer
 	                System.out.println("Manufacturer added");
 	                
 	                break;
 
-	            case 13:
+	            case 14:
 	                System.out.println("Logging out...");
 	                return; // Exit the method to simulate logout
 
@@ -262,15 +406,13 @@ public class BayMotors {
 	                break;
 	        }
 	        
+	        System.out.println("\nPress Enter to return to the main menu...");
+	        sc.nextLine(); // Wait for Enter
+	        
 	    }
 	    
-    }
-	    
-	    
+    }    
 	   
-	    
-  
-    
     public static void displayMechanicOptions() {
 		System.out.println("Mechanic Options:");
         System.out.println("1. View Tasks");

@@ -14,4 +14,9 @@ public class CustomerService {
 	public static void addCustomer(Customer customer) {
 		CustomerDao.addCustomer(customer);
 	}
+	
+	// Check if a customer with the given ID exists
+    public static boolean isCustomerExists(int customerId) {
+        return CustomerDao.getAllCustomers().stream().anyMatch(customer -> customer.getId() == customerId);
+    }
 }

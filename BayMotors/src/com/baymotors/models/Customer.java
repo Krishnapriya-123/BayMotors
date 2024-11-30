@@ -97,12 +97,18 @@ public class Customer {
     }
 
     @Override
-	public String toString() {
-    	String registered_date = null;
-    	if (registrationDate != null) {
-    		registered_date = Util.formatDate(registrationDate);
-    	}
-		return "ID: " + id + " FirstName: " + firstName + " LastName: " + lastName + " MobileNumber: " + mobileNumber + " IsRegistered: " + isRegistered + " registrationDate: " + registered_date;
-	}
+    public String toString() {
+        // Format the registration date if it's not null
+        String registered_date = (registrationDate != null) ? Util.formatDate(registrationDate) : "N/A";
+        
+        // Return the formatted string with "|" separator
+        return "ID: " + id + " | " +
+               "FirstName: " + firstName + " | " +
+               "LastName: " + lastName + " | " +
+               "MobileNumber: " + mobileNumber + " | " +
+               "IsRegistered: " + isRegistered + " | " +
+               "registrationDate: " + registered_date;
+    }
+
 }
 
