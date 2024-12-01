@@ -14,6 +14,7 @@ import com.baymotors.models.Vehicle;
 import com.baymotors.constants.Roles;
 import com.baymotors.constants.Priority;
 import com.baymotors.constants.Status;
+import com.baymotors.constants.CustomerType;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -87,17 +88,34 @@ public class BayMotors {
         System.out.println("| 2. Add Mechanic                                               |");
         System.out.println("| 3. List Customers                                             |");
         System.out.println("| 4. Add Customer                                               |");
-        System.out.println("| 5. List Vehicles                                              |");
-        System.out.println("| 6. Log Vehicle                                                |");
-        System.out.println("| 7. List Tasks                                                 |");
-        System.out.println("| 8. Add Task                                                   |");
-        System.out.println("| 9. Notify Customers                                           |");
-        System.out.println("| 10. List Suppliers                                            |");
-        System.out.println("| 11. Add Supplier                                              |");
-        System.out.println("| 12. List Manufacturers                                        |");
-        System.out.println("| 13. Add Manufacturer                                          |");
-        System.out.println("| 14. LogOut                                                    |");
+        System.out.println("| 5. Register Customer                                          |");
+        System.out.println("| 6. List Vehicles                                              |");
+        System.out.println("| 7. Log Vehicle                                                |");
+        System.out.println("| 8. List Tasks                                                 |");
+        System.out.println("| 9. Add Task                                                   |");
+        System.out.println("| 10. Notify Customers                                          |");
+        System.out.println("| 11. List Manufacturers                                        |");
+        System.out.println("| 12. Add Manufacturer                                          |");
+        System.out.println("| 13. List Suppliers                                            |");
+        System.out.println("| 14. Add Supplier                                              |");
+        System.out.println("| 15. LogOut                                                    |");
         System.out.println(border);
+    }
+    
+    public static void displayMechanicMenu() {
+    	String border = "+---------------------------------------------------------------+";
+        System.out.println("\n" + border);
+        System.out.println("|                   Mechanic Operations Menu                    |");
+        System.out.println(border);
+        System.out.println("| 1. List Tasks                                                |");
+        System.out.println("| 2. Complete Task                                             |");
+        System.out.println("| 3. List Manufacturers                                        |");
+        System.out.println("| 4. Add Manufacturer                                          |");
+        System.out.println("| 5. List Suppliers                                            |");
+        System.out.println("| 6. Add Supplier                                              |");
+        System.out.println("| 7. LogOut                                                    |");
+        System.out.println(border);
+
     }
 
     
@@ -189,11 +207,18 @@ public class BayMotors {
 	            	System.out.print("Address: ");
 	            	String address2 = sc.nextLine();
 	            	
-	            	 System.out.print("IsRegistered (true/false): ");
-	                 boolean isRegistered = Boolean.parseBoolean(sc.nextLine()); // Parse string to boolean
+	            	 System.out.print("Select Customer Type (Choose from options: 1 => Registered, 2 => Walk-In): ");
+	            	 int customerTypeChoice = sc.nextInt();
+	                 sc.nextLine(); 
 	                 
-	                 System.out.print("RegistrationDate (yyyy-MM-dd): ");
-	                 String registrationDateStr = sc.nextLine();
+	                 String customerType = CustomerType.WALKIN;
+	                 String registrationDateStr = null;
+	                 if (customerTypeChoice == 1) {
+	                	 customerType = CustomerType.REGISTERED;
+	                	 System.out.print("RegistrationDate (yyyy-MM-dd): ");
+		                 registrationDateStr = sc.nextLine();
+	                 }
+	                 
 	                 
 	                 // Parse the registration date string to a Date object
 	                 Date registrationDate = null;
@@ -208,14 +233,48 @@ public class BayMotors {
 	            	int nextId2 = EmployeeService.getEmployees().size() + 1;
 	            	
 	            	// Create a Mechanic object
-	            	Customer cus = new Customer(nextId2, firstName2, lastName2, email2, mobileNumber2, address2, isRegistered, registrationDate);
+	            	Customer cus = new Customer(nextId2, firstName2, lastName2, email2, mobileNumber2, address2, customerType, registrationDate);
 
 	            	// Add the mechanic to the repository
 	            	CustomerService.addCustomer(cus);
 	                System.out.println("Customer added: " + cus);
 	                break;
-	            
+	                
 	            case 5:
+	            	// logic to register the customer
+	            	System.out.println("\n--- Register a Walk-In Customer ---");
+	            	
+	            	// Fetch the list of Walk-In customers
+	                List<Customer> walkInCustomers = CustomerService.getWalkInCustomers();
+	            	
+	                // Check if there are any Walk-In customers
+	                if (walkInCustomers.isEmpty()) {
+	                    System.out.println("No Walk-In customers available to register.");
+	                    break;
+	                }
+	                
+	                // Display the Walk-In customers
+	                System.out.println("Walk-In Customers:");
+	                walkInCustomers.forEach(customer -> 
+	                    System.out.println("ID: " + customer.getId() + " | Name: " + customer.getFirstName() + " " + customer.getLastName())
+	                );
+	                
+	                // Prompt the user to select a customer to register
+	                System.out.print("\nEnter the ID of the customer to register: ");
+	                int customerIdToRegister = sc.nextInt();
+	                sc.nextLine(); // Consume newline
+
+	                // Validate the selection and register the customer
+	                boolean isRegistered = CustomerService.registerCustomer(customerIdToRegister);
+
+	                if (isRegistered) {
+	                    System.out.println("Customer registered successfully!");
+	                } else {
+	                    System.out.println("Invalid customer ID. Registration failed.");
+	                }
+	                break;
+	            
+	            case 6:
 	            	System.out.println("\n--- List of Vehicles ---");
 	            	List<Vehicle> vehicles = VehicleService.getVehicles();
 	            	for(Vehicle vehicle : vehicles) {
@@ -223,7 +282,7 @@ public class BayMotors {
 	            	}
 	            	break;
 
-	            case 6:
+	            case 7:
 	            	System.out.println("\n--- Log a Vehicle ---");
 
 	                // Take user inputs for vehicle details
@@ -277,7 +336,7 @@ public class BayMotors {
 	                System.out.println("Vehicle logged successfully!");
 	                break;
 
-	            case 7:
+	            case 8:
 	            	// Logic to list tasks
 	                System.out.println("\nList of Tasks\n");
 	                
@@ -288,7 +347,7 @@ public class BayMotors {
 		            }
 	                break;
 
-	            case 8:
+	            case 9:
 	            	// Logic to add a task
 	            	System.out.println("\n--- Add a New Task ---");
 	            	// Select a valid vehicleId
@@ -372,37 +431,37 @@ public class BayMotors {
 
 	                System.out.println("Task created successfully!");
 	                break;
-	            case 9:
+	            case 10:
 	            	// Logic to notify customers
 	                System.out.println("Customers notified");
 	                
 	                break;
 
-	            case 10:
+	            case 11:
 	            	// Logic to list suppliers
 	            	System.out.println("List of Suppliers");
 	                
 	                break;
 
-	            case 11:
+	            case 12:
 	            	// Logic to add a supplier
 	                System.out.println("Supplier added");
 	                
 	                break;
 
-	            case 12:
+	            case 13:
 	            	// Logic to list manufacturers
 	                System.out.println("List of Manufacturers");
 	                
 	                break;
 
-	            case 13:
+	            case 14:
 	            	// Logic to add a manufacturer
 	                System.out.println("Manufacturer added");
 	                
 	                break;
 
-	            case 14:
+	            case 15:
 	                System.out.println("Logging out...");
 	                return; // Exit the method to simulate logout
 
@@ -419,10 +478,11 @@ public class BayMotors {
     }    
 	   
     public static void displayMechanicOptions() {
-		System.out.println("Mechanic Options:");
-        System.out.println("1. View Tasks");
-        System.out.println("2. Update Task Status");
-        System.out.println("3. Log Out");
+    	while(true) {
+    		displayMechanicMenu();
+    		break;
+    	}
+		
 	}
 
 }

@@ -10,7 +10,7 @@ public class Customer {
     private String email;
     private String mobileNumber;
     private String address;
-    private boolean isRegistered;
+    private String customerType;
     private Date registrationDate;
 
     // Default constructor
@@ -19,7 +19,7 @@ public class Customer {
 
     // Parameterized constructor
     public Customer(int id, String firstName, String lastName, String email, String mobileNumber,
-                    String address, boolean isRegistered, Date registrationDate) {
+                    String address, String customerType, Date registrationDate) {
     
         this.id = id;
         this.firstName = firstName;
@@ -27,7 +27,7 @@ public class Customer {
         this.email = email;
         this.mobileNumber = mobileNumber;
         this.address = address;
-        this.isRegistered = isRegistered;
+        this.customerType = customerType;
         this.registrationDate = registrationDate;
     }
 
@@ -80,12 +80,12 @@ public class Customer {
         this.address = address;
     }
 
-    public boolean isRegistered() {
-        return isRegistered;
+    public String getCustomerType() {
+        return customerType;
     }
 
-    public void setRegistered(boolean isRegistered) {
-        this.isRegistered = isRegistered;
+    public void setCustomerType(String customerType) {
+        this.customerType = customerType;
     }
 
     public Date getRegistrationDate() {
@@ -99,15 +99,15 @@ public class Customer {
     @Override
     public String toString() {
         // Format the registration date if it's not null
-        String registered_date = (registrationDate != null) ? Util.formatDate(registrationDate) : "N/A";
+        String registeredDate = (registrationDate != null) ? Util.formatDate(registrationDate) : "N/A";
         
         // Return the formatted string with "|" separator
         return "ID: " + id + " | " +
                "FirstName: " + firstName + " | " +
                "LastName: " + lastName + " | " +
                "MobileNumber: " + mobileNumber + " | " +
-               "IsRegistered: " + isRegistered + " | " +
-               "registrationDate: " + registered_date;
+               "CustomerType: " + customerType + " | " +
+               "registrationDate: " + registeredDate;
     }
 
 }
