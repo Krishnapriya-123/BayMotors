@@ -13,15 +13,15 @@ public class TaskDao {
 	private static final List<Task> tasks = new ArrayList<>();
 	
 	static {
-        tasks.add(new Task(1, 101, 201, "Oil change for vehicle 101", 
+        tasks.add(new Task(1, 1, 2, "Oil change for vehicle 1", 
                 Status.PENDING, Priority.LOW, null, 0, null));
-        tasks.add(new Task(2, 102, 202, "Engine repair for vehicle 102", 
+        tasks.add(new Task(2, 1, 2, "Engine repair for vehicle 1", 
                 Status.IN_PROGRESS, Priority.HIGH, null, 0, null));
-        tasks.add(new Task(3, 103, 201, "Brake check for vehicle 103", 
+        tasks.add(new Task(3, 1, 2, "Brake check for vehicle 1", 
                 Status.COMPLETED, Priority.MEDIUM, new Date(), 8, "Good work"));
-        tasks.add(new Task(4, 104, 203, "Tire replacement for vehicle 104", 
+        tasks.add(new Task(4, 2, 3, "Tire replacement for vehicle 2", 
                 Status.CANCELLED, Priority.LOW, null, 0, "Customer canceled"));
-        tasks.add(new Task(5, 105, 202, "Battery replacement for vehicle 105", 
+        tasks.add(new Task(5, 3, 3, "Battery replacement for vehicle 3", 
                 Status.PENDING, Priority.MEDIUM, null, 0, null));
     }
 
@@ -41,5 +41,17 @@ public class TaskDao {
      */
     public static void addTask(Task task) {
         tasks.add(task);
+    }
+    
+    public static boolean markTaskAsCompleted(int taskId) {
+    	Task currentTask = tasks.stream().filter(task -> task.getId() == taskId).findFirst().orElse(null);
+    	if(currentTask != null) {
+    		currentTask.setStatus(Status.COMPLETED);
+    		currentTask.setCompletedAt(new Date());
+    		return true;
+    	}
+    	return false;
+    	
+    	
     }
 }

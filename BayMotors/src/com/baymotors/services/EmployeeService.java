@@ -6,8 +6,13 @@ import com.baymotors.dao.EmployeeDao;
 import com.baymotors.models.Employee;
 
 public class EmployeeService {
-	public static boolean validateEmployee(String username, String password, String role) {
-		return EmployeeDao.validateEmployee(username, password, role);
+	public static Employee validateEmployee(String username, String password, String role) {
+		boolean loginStatus = EmployeeDao.validateEmployee(username, password, role);
+		Employee emp = null;
+		if (loginStatus) {
+			emp = EmployeeDao.getEmployeeByUsername(username);
+		}
+		return emp;
 	}
 	
 	public static void addEmployee(Employee employee) {
@@ -15,9 +20,7 @@ public class EmployeeService {
 	 }
 	
 	 public static List<Employee> getEmployees() {
-		 List<Employee> employees = EmployeeDao.getEmployees();
-		 
-		 return employees;
+		 return EmployeeDao.getEmployees();
 	 }
 	 
 	 public static boolean isEmployeeExists(int employeeId) {

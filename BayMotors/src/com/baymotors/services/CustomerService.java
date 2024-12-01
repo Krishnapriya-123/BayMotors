@@ -1,8 +1,12 @@
 package com.baymotors.services;
 
 import com.baymotors.dao.CustomerDao;
+import com.baymotors.dao.TaskDao;
+import com.baymotors.dao.VehicleDao;
 import com.baymotors.models.Customer;
 import com.baymotors.constants.CustomerType;
+import com.baymotors.models.Task;
+import com.baymotors.models.Vehicle;
 
 import java.util.List;
 import java.util.Date;
@@ -23,6 +27,17 @@ public class CustomerService {
 	// Check if a customer with the given ID exists
     public static boolean isCustomerExists(int customerId) {
         return CustomerDao.getAllCustomers().stream().anyMatch(customer -> customer.getId() == customerId);
+    }
+    
+    /**
+     * Fetch a list of all Registered customers.
+     *
+     * @return List of Registered customers.
+     */
+    public static List<Customer> getRegisteredCustomers() {
+        return CustomerDao.getAllCustomers().stream()
+                .filter(customer -> CustomerType.REGISTERED.equals(customer.getCustomerType()))
+                .collect(Collectors.toList());
     }
     
     /**
@@ -54,5 +69,12 @@ public class CustomerService {
             return true;
         }
         return false; // Customer not found or already registered
+    }
+    
+    public static Customer taskAssociatedCustomer(int taskId) {
+    	Task currentTask = TaskDao.getTasks().stream().filter(task -> task.getId() == taskId).findFirst().orElse(null);
+    	Vehicle currentVehicle = VehicleDao.getVehicles().stream().filter(vehicle -> vehicle.getId() == currentTask.getVehicleId()).findFirst().orElse(null);
+    	Customer currentCustomer = CustomerDao.getCustomerById(currentVehicle.getCustomerId()); 
+    	return currentCustomer;
     }
 }

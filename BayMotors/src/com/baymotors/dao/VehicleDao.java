@@ -11,9 +11,9 @@ public class VehicleDao {
 	private static final List<Vehicle> vehicles = new ArrayList<>();
 	
 	static {
-        vehicles.add(new Vehicle(1, "AB123CD", "Toyota", "Corolla", 2020, "Blue", 101));
-        vehicles.add(new Vehicle(2, "XY456EF", "Honda", "Civic", 2018, "Black", 102));
-        vehicles.add(new Vehicle(3, "GH789IJ", "Ford", "Focus", 2022, "White", 103));
+        vehicles.add(new Vehicle(1, "AB123CD", "Toyota", "Corolla", 2020, "Blue", 1));
+        vehicles.add(new Vehicle(2, "XY456EF", "Honda", "Civic", 2018, "Black", 2));
+        vehicles.add(new Vehicle(3, "GH789IJ", "Ford", "Focus", 2022, "White", 3));
     }
 
 	/**

@@ -32,7 +32,7 @@ public class EmployeeDao {
     }
 
     public static List<Employee> getEmployees() {
-        return employees;
+        return new ArrayList<>(employees);
     }
     
     public static Employee getEmployeeByUsername(String username) {

@@ -1,6 +1,8 @@
 package com.baymotors.main;
 
 import com.baymotors.services.EmployeeService;
+import com.baymotors.services.ManufacturerService;
+import com.baymotors.services.SupplierService;
 import com.baymotors.services.CustomerService;
 import com.baymotors.services.TaskService;
 import com.baymotors.services.VehicleService;
@@ -10,6 +12,8 @@ import com.baymotors.models.Mechanic;
 import com.baymotors.models.Customer;
 import com.baymotors.models.Task;
 import com.baymotors.models.Vehicle;
+import com.baymotors.models.Manufacturer;
+import com.baymotors.models.Supplier;
 
 import com.baymotors.constants.Roles;
 import com.baymotors.constants.Priority;
@@ -53,11 +57,12 @@ public class BayMotors {
             }
 
             role = roleId == 1 ? "Manager" : "Mechanic";
-            loginStatus = EmployeeService.validateEmployee(username, password, role);
+            Employee employee = EmployeeService.validateEmployee(username, password, role);
+          
 
-            if (loginStatus) {
+            if (employee!= null) {
                 System.out.println("Logged in successfully!");
-                getDashboard(role);
+                getDashboard(employee);
             } else {
                 System.out.println("Incorrect Credentials. Please try again.");
             }
@@ -67,13 +72,13 @@ public class BayMotors {
     }
     
     
-    public static void getDashboard(String role) {
+    public static void getDashboard(Employee employee) {
         System.out.println("\n--- Dashboard ---");
 
-        if (Roles.MANAGER.equals(role)) {
+        if (Roles.MANAGER.equals(employee.getRole())) {
             displayManagerOptions();
-        } else if (Roles.MECHANIC.equals(role)) {
-            displayMechanicOptions();
+        } else if (Roles.MECHANIC.equals(employee.getRole())) {
+            displayMechanicOptions(employee);
         } else {
             System.out.println("Invalid role. No dashboard available.");
         }
@@ -212,25 +217,17 @@ public class BayMotors {
 	                 sc.nextLine(); 
 	                 
 	                 String customerType = CustomerType.WALKIN;
-	                 String registrationDateStr = null;
+	                 
+	                 Date registrationDate = null;
 	                 if (customerTypeChoice == 1) {
 	                	 customerType = CustomerType.REGISTERED;
-	                	 System.out.print("RegistrationDate (yyyy-MM-dd): ");
-		                 registrationDateStr = sc.nextLine();
+	                	 registrationDate = new Date();
 	                 }
 	                 
 	                 
-	                 // Parse the registration date string to a Date object
-	                 Date registrationDate = null;
-	                 try {
-	                     registrationDate = new SimpleDateFormat("yyyy-MM-dd").parse(registrationDateStr);
-	                 } catch (ParseException e) {
-	                     System.out.println("Invalid date format. Please use yyyy-MM-dd.");
-	                     e.printStackTrace();
-	                     return; // Exit the process in case of invalid date input
-	                 }
+	                
 	            	// Dynamically generate the next ID
-	            	int nextId2 = EmployeeService.getEmployees().size() + 1;
+	            	int nextId2 = CustomerService.listCustomers().size() + 1;
 	            	
 	            	// Create a Mechanic object
 	            	Customer cus = new Customer(nextId2, firstName2, lastName2, email2, mobileNumber2, address2, customerType, registrationDate);
@@ -435,32 +432,150 @@ public class BayMotors {
 	            	// Logic to notify customers
 	                System.out.println("Customers notified");
 	                
+	                System.out.println("\n--- Notify Customers ---");
+
+	                // Ask the user to select the type of notification
+	                System.out.println("Select Notification Type:");
+	                System.out.println("1. Offers to Registered Customers");
+	                System.out.println("2. Advertisement for Walk-In Customers");
+
+	                int notificationType = -1;
+	                boolean validChoice = false;
+	                while (!validChoice) {
+	                    System.out.print("Enter your choice (1 or 2): ");
+	                    notificationType = sc.nextInt();
+	                    sc.nextLine(); // Consume newline
+
+	                    if (notificationType == 1 || notificationType == 2) {
+	                        validChoice = true;
+	                    } else {
+	                        System.out.println("Invalid choice. Please enter 1 or 2.");
+	                    }
+	                }
+
+	                // Prompt the user to enter the notification message
+	                System.out.print("Enter the notification message: ");
+	                String notificationMessage = sc.nextLine();
+
+	                // Fetch the list of customers based on the selected type
+	                List<Customer> targetCustomers;
+	                if (notificationType == 1) {
+	                    System.out.println("\n--- Sending Offers to Registered Customers ---");
+	                    targetCustomers = CustomerService.getRegisteredCustomers();
+	                } else {
+	                    System.out.println("\n--- Sending Advertisement to Walk-In Customers ---");
+	                    targetCustomers = CustomerService.getWalkInCustomers();
+	                }
+
+	                // Check if there are any customers to notify
+	                if (targetCustomers.isEmpty()) {
+	                    System.out.println("No customers found for the selected category.");
+	                    break;
+	                }
+
+	                // Print notifications for each customer
+	                targetCustomers.forEach(customer -> {
+	                    System.out.println("Notification sent to " + customer.getFirstName() + " " + customer.getLastName() +
+	                            " (" + customer.getEmail() + "): " + notificationMessage);
+	                });
+
+	                System.out.println("\nAll notifications have been sent.");
 	                break;
 
 	            case 11:
-	            	// Logic to list suppliers
-	            	System.out.println("List of Suppliers");
-	                
+	            	// Logic to list of Manufacturers
+	           
+	            	System.out.println("\n--- List of Manufacturers ---");
+	                ManufacturerService.listManufacturers().forEach(System.out::println);
 	                break;
 
 	            case 12:
-	            	// Logic to add a supplier
-	                System.out.println("Supplier added");
-	                
+	            	// Logic to add a Manufacturer
+	            	System.out.println("\n--- Add a New Manufacturer ---");
+
+	                System.out.print("Enter Manufacturer Name: ");
+	                String manufacturerName = sc.nextLine();
+
+	                System.out.print("Enter Country: ");
+	                String country = sc.nextLine();
+
+	                int nextManufacturerId = ManufacturerService.listManufacturers().size() + 1;
+
+	                Manufacturer newManufacturer = new Manufacturer(nextManufacturerId, manufacturerName, country);
+
+	                try {
+	                    ManufacturerService.addManufacturer(newManufacturer);
+	                    System.out.println("Manufacturer added successfully!");
+	                } catch (IllegalArgumentException e) {
+	                    System.out.println("Error: " + e.getMessage());
+	                }
 	                break;
 
 	            case 13:
-	            	// Logic to list manufacturers
-	                System.out.println("List of Manufacturers");
-	                
+	            	// Logic to list Suppliers
+	            	System.out.println("\n--- List of Suppliers ---");
+	                SupplierService.listSuppliers().forEach(System.out::println);
 	                break;
 
 	            case 14:
-	            	// Logic to add a manufacturer
-	                System.out.println("Manufacturer added");
-	                
-	                break;
+	            	// Logic to add a supplier
+	            	System.out.println("\n--- Add a New Supplier ---");
 
+	                // Display the list of existing manufacturers
+	                List<Manufacturer> manufacturers = ManufacturerService.listManufacturers();
+	                if (manufacturers.isEmpty()) {
+	                    System.out.println("No manufacturers found. Please add a manufacturer first.");
+	                    break;
+	                }
+
+	                System.out.println("Available Manufacturers:");
+	                manufacturers.forEach(manufacturer -> 
+	                    System.out.println("ID: " + manufacturer.getId() + " | Name: " + manufacturer.getName())
+	                );
+
+	                // Ask the user to select a manufacturer
+	                int manufacturerId = -1;
+	                boolean validManufacturer = false;
+	                while (!validManufacturer) {
+	                    System.out.print("Enter Manufacturer ID from the list above: ");
+	                    manufacturerId = sc.nextInt();
+	                    sc.nextLine(); // Consume newline
+
+	                    // Validate if the entered manufacturer ID exists
+	                    validManufacturer = ManufacturerService.isValidManufacturerId(manufacturerId);
+	                    if (!validManufacturer) {
+	                        System.out.println("Invalid Manufacturer ID. Please try again.");
+	                    }
+	                }
+
+	                // Collect remaining supplier details
+	                System.out.print("Enter Supplier Name: ");
+	                String supplierName = sc.nextLine();
+
+	                System.out.print("Enter Contact Person: ");
+	                String contactPerson = sc.nextLine();
+
+	                System.out.print("Enter Contact Number: ");
+	                String contactNumber = sc.nextLine();
+
+	                System.out.print("Enter Email: ");
+	                String supplierEmail = sc.nextLine();
+
+	                System.out.print("Enter Address: ");
+	                String supplierAddress = sc.nextLine();
+
+	                // Generate the next Supplier ID dynamically
+	                int nextSupplierId = SupplierService.listSuppliers().size() + 1;
+
+	                Supplier newSupplier = new Supplier(nextSupplierId, supplierName, contactPerson, contactNumber, supplierEmail, manufacturerId, supplierAddress);
+
+	                try {
+	                    SupplierService.addSupplier(newSupplier);
+	                    System.out.println("Supplier added successfully!");
+	                } catch (IllegalArgumentException e) {
+	                    System.out.println("Error: " + e.getMessage());
+	                }
+	                break;
 	            case 15:
 	                System.out.println("Logging out...");
 	                return; // Exit the method to simulate logout
@@ -477,10 +592,188 @@ public class BayMotors {
 	    
     }    
 	   
-    public static void displayMechanicOptions() {
+    public static void displayMechanicOptions(Employee employee) {
+    	
+    	Scanner sc = new Scanner(System.in);
     	while(true) {
     		displayMechanicMenu();
-    		break;
+    		
+    		int mechanicOption = -1;
+    		boolean validInput = false;
+    		
+    		while(!validInput) {
+    			try {
+    				System.out.print("Enter your Choice: ");
+    				mechanicOption = sc.nextInt();
+    				sc.nextLine();
+    				validInput = true;
+    			}
+    			catch(Exception e){
+    				System.out.println("Invalid Input. Please enter a valid choice.");
+    				sc.nextLine();
+    				
+    			}
+    		}
+    		
+    		switch(mechanicOption) {
+    			case 1:
+    				//List Tasks
+    				System.out.println("\n--- List of Tasks ---");
+    			    TaskService.getTasksByMechanic(employee.getId()).forEach(System.out::println);
+    				break;
+    				
+    			case 2:
+    				//Complete Task
+    				
+    				System.out.println("\n--- Complete an Existing Task ---");
+    				List<Task> tasks = TaskService.getTasksByMechanic(employee.getId());
+    				if (tasks.isEmpty()) {
+    			        System.out.println("No Pending tasks available to complete.");
+    			        break;
+    			    }
+    				// Display the tasks
+    			    System.out.println("Tasks Available to Complete:");
+    			    tasks.forEach(task -> 
+    			        System.out.println("ID: " + task.getId() + " | Description: " + task.getDescription() +
+    			                           " | Status: " + task.getStatus() + " | Priority: " + task.getPriority())
+    			    );
+    			    
+    			    
+    			    
+    			 // Ask the user to select a task
+    			    int taskId = -1;
+    			    boolean selectedValidTask = false;
+    			    while (!selectedValidTask) {
+    			        System.out.print("Enter the ID of the task to mark as complete: ");
+    			        taskId = sc.nextInt();
+    			        sc.nextLine(); // Consume newline
+    			        selectedValidTask = TaskService.isValidTaskId(taskId);
+
+    			        if (!selectedValidTask) {
+    			            System.out.println("Invalid task ID. Please try again.");
+    			        }
+    			    }
+    			    
+    			    boolean isCompleted = TaskService.endTask(taskId);
+    			    if(isCompleted) {
+    			    	System.out.println("Task marked as COMPLETED.");
+    			    	Customer customer = CustomerService.taskAssociatedCustomer(taskId);
+    			    	String notificationMessage = "Your Vehicle Service is Completed.";
+    		            System.out.println("Notification sent to " + customer.getFirstName() + " " + customer.getLastName() +
+    		                            " (" + customer.getEmail() + "): " + notificationMessage);
+    		               
+    			    }
+    			    else {
+    			    	System.out.println("Task not found.");
+    			    }
+    			    
+    			    
+    				break;
+    				
+    			case 3:
+    				//List Manufacturers
+	            	System.out.println("\n--- List of Manufacturers ---");
+	                ManufacturerService.listManufacturers().forEach(System.out::println);
+    				break;
+    				
+    			case 4:
+    				//Add Manufacturers
+    				System.out.println("\n--- Add a New Manufacturer ---");
+
+	                System.out.print("Enter Manufacturer Name: ");
+	                String manufacturerName = sc.nextLine();
+
+	                System.out.print("Enter Country: ");
+	                String country = sc.nextLine();
+
+	                int nextManufacturerId = ManufacturerService.listManufacturers().size() + 1;
+
+	                Manufacturer newManufacturer = new Manufacturer(nextManufacturerId, manufacturerName, country);
+
+	                try {
+	                    ManufacturerService.addManufacturer(newManufacturer);
+	                    System.out.println("Manufacturer added successfully!");
+	                } catch (IllegalArgumentException e) {
+	                    System.out.println("Error: " + e.getMessage());
+	                }
+    				break;
+    			
+    			case 5:
+    				//List Suppliers
+    				System.out.println("\n--- List of Suppliers ---");
+	                SupplierService.listSuppliers().forEach(System.out::println);
+    				break;
+    				
+    			case 6:
+    				//Add Suppliers
+    				System.out.println("\n--- Add a New Supplier ---");
+
+	                // Display the list of existing manufacturers
+	                List<Manufacturer> manufacturers = ManufacturerService.listManufacturers();
+	                if (manufacturers.isEmpty()) {
+	                    System.out.println("No manufacturers found. Please add a manufacturer first.");
+	                    break;
+	                }
+
+	                System.out.println("Available Manufacturers:");
+	                manufacturers.forEach(manufacturer -> 
+	                    System.out.println("ID: " + manufacturer.getId() + " | Name: " + manufacturer.getName())
+	                );
+
+	                // Ask the user to select a manufacturer
+	                int manufacturerId = -1;
+	                boolean validManufacturer = false;
+	                while (!validManufacturer) {
+	                    System.out.print("Enter Manufacturer ID from the list above: ");
+	                    manufacturerId = sc.nextInt();
+	                    sc.nextLine(); // Consume newline
+
+	                    // Validate if the entered manufacturer ID exists
+	                    validManufacturer = ManufacturerService.isValidManufacturerId(manufacturerId);
+	                    if (!validManufacturer) {
+	                        System.out.println("Invalid Manufacturer ID. Please try again.");
+	                    }
+	                }
+
+	                // Collect remaining supplier details
+	                System.out.print("Enter Supplier Name: ");
+	                String supplierName = sc.nextLine();
+
+	                System.out.print("Enter Contact Person: ");
+	                String contactPerson = sc.nextLine();
+
+	                System.out.print("Enter Contact Number: ");
+	                String contactNumber = sc.nextLine();
+
+	                System.out.print("Enter Email: ");
+	                String supplierEmail = sc.nextLine();
+
+	                System.out.print("Enter Address: ");
+	                String supplierAddress = sc.nextLine();
+
+	                // Generate the next Supplier ID dynamically
+	                int nextSupplierId = SupplierService.listSuppliers().size() + 1;
+
+	                Supplier newSupplier = new Supplier(nextSupplierId, supplierName, contactPerson, contactNumber, supplierEmail, manufacturerId, supplierAddress);
+
+	                try {
+	                    SupplierService.addSupplier(newSupplier);
+	                    System.out.println("Supplier added successfully!");
+	                } catch (IllegalArgumentException e) {
+	                    System.out.println("Error: " + e.getMessage());
+	                }
+    				break;
+    				
+    			case 7:
+    				//Logging out
+    				break;
+    				
+    			default:
+    				System.out.println("Invalid Choice. Please enter valid choice.");
+    				break; 			
+    		}
+    		System.out.println("\nPress Enter to return to the Main Menu.....");
+    		sc.nextLine();
     	}
 		
 	}
