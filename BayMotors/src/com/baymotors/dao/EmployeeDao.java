@@ -8,7 +8,6 @@ import com.baymotors.models.Mechanic;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 /**
  * Data Access Object (DAO) for managing employee-related data.
  */
@@ -31,38 +30,77 @@ public class EmployeeDao {
             Roles.MECHANIC, "789 Bay Lane"));
     }
 
-    public static List<Employee> getEmployees() {
-        return new ArrayList<>(employees);
+    /**
+     * Fetch all employees.
+     *
+     * @return List of employees.
+     * @throws Exception If fetching employees fails.
+     */
+    public static List<Employee> getEmployees() throws Exception {
+        try {
+            return new ArrayList<>(employees);
+        } catch (Exception e) {
+            System.err.println("Error while fetching employees: " + e.getMessage());
+            throw new Exception("Unable to fetch employees.", e);
+        }
     }
     
-    public static Employee getEmployeeByUsername(String username) {
-        return employees.stream()
-                .filter(emp -> emp.getUsername().equals(username))
-                .findFirst()
-                .orElse(null);
+    /**
+     * Fetch an employee by their username.
+     *
+     * @param username The username of the employee.
+     * @return The employee object or null if not found.
+     * @throws Exception If fetching the employee fails.
+     */
+    public static Employee getEmployeeByUsername(String username) throws Exception {
+        try {
+            return employees.stream()
+                    .filter(emp -> emp.getUsername().equals(username))
+                    .findFirst()
+                    .orElse(null);
+        } catch (Exception e) {
+            System.err.println("Error while finding employee by username: " + e.getMessage());
+            throw new Exception("Unable to fetch employee by username: " + username, e);
+        }
     }
     
-	public static boolean validateEmployee(String username, String password, String role) {
-	    try {
-	        // Fetch employee by username from EmployeeData
-	        Employee employee = EmployeeDao.getEmployeeByUsername(username);
-
-	        // Validate employee details
-	        if (employee != null && employee.getUsername().equals(username) &&
-	            employee.getPassword().equals(password) && // Replace with employee-specific password logic if needed
-	            employee.getRole().equalsIgnoreCase(role)) {
-	            return true;
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-
-	    return false;
-	}
+    /**
+     * Validate an employee by username, password, and role.
+     *
+     * @param username The username of the employee.
+     * @param password The password of the employee.
+     * @param role     The role of the employee.
+     * @return true if valid, false otherwise.
+     * @throws Exception If validating the employee fails.
+     */
+    public static boolean validateEmployee(String username, String password, String role) throws Exception {
+        try {
+            Employee employee = getEmployeeByUsername(username);
+            // Validate employee details
+            if (employee != null && employee.getPassword().equals(password) && employee.getRole().equalsIgnoreCase(role)) {
+                return true;
+            }
+        } catch (Exception e) {
+            System.err.println("Error while validating employee: " + e.getMessage());
+            throw new Exception("Unable to validate employee.", e);
+        }
+        return false;
+    }
 	
-	public static void addEmployee(Employee employee) {
-		employees.add(employee);
-	}
+    /**
+     * Add a new employee.
+     *
+     * @param employee The employee to add.
+     * @throws Exception If adding the employee fails.
+     */
+    public static void addEmployee(Employee employee) throws Exception {
+        try {
+            employees.add(employee);
+        } catch (Exception e) {
+            System.err.println("Error while adding employee: " + e.getMessage());
+            throw new Exception("Unable to add employee.", e);
+        }
+    }
 	
 }
 

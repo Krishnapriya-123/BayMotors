@@ -13,11 +13,33 @@ public class SupplierDao {
         suppliers.add(new Supplier(2, "XYZ Parts", "Jane Smith", "9876543210", "xyz@example.com", 2, "456 Elm Street"));
     }
 
-    public static List<Supplier> listSuppliers() {
-        return new ArrayList<>(suppliers);
+    /**
+     * Fetch the list of suppliers.
+     *
+     * @return List of suppliers.
+     * @throws Exception If fetching suppliers fails.
+     */
+    public static List<Supplier> listSuppliers() throws Exception {
+        try {
+            return new ArrayList<>(suppliers);
+        } catch (Exception e) {
+            System.err.println("Error while fetching suppliers: " + e.getMessage());
+            throw new Exception("Unable to fetch suppliers.", e);
+        }
     }
 
-    public static void addSupplier(Supplier supplier) {
-        suppliers.add(supplier);
+    /**
+     * Add a new supplier.
+     *
+     * @param supplier The supplier to add.
+     * @throws Exception If adding the supplier fails.
+     */
+    public static void addSupplier(Supplier supplier) throws Exception {
+        try {
+            suppliers.add(supplier);
+        } catch (Exception e) {
+            System.err.println("Error while adding supplier: " + e.getMessage());
+            throw new Exception("Unable to add supplier.", e);
+        }
     }
 }
