@@ -30,8 +30,9 @@ public abstract class Employee {
 	}
     
     // Abstract methods
+    public abstract String displayMechanicMenu();
+    public abstract String displayManagerMenu();
     public abstract String performRoleSpecificTask(); // Returns a message about the task performed
-//    public abstract List<Task> viewTasks(); // Returns a list of tasks
     
     // Shared methods
     public void sendNotification(String message) {

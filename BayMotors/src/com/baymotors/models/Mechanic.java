@@ -18,16 +18,27 @@ public class Mechanic extends Employee {
         return "Mechanic task: Repairing vehicles and completing assigned tasks.";
     }
 	
-//	@Override
-//    public List<Task> viewTasks() {
-//        return TaskDao.getTasksAssignedToMechanic(this.getId()); // Retrieve tasks specific to this mechanic
-//    }
-//	
-	// Mechanic-specific method
-//    public boolean completeTask(int taskId) {
-//        return TaskDao.markTaskAsCompleted(taskId, this.getId());
-//    }
-	
+	@Override
+    public String displayMechanicMenu() {
+        String border = "+---------------------------------------------------------------+";
+        return "\n" + border + "\n" +
+               "|                   Mechanic Operations Menu                    |\n" +
+               border + "\n" +
+               "| 1. List Tasks                                                |\n" +
+               "| 2. Complete Task                                             |\n" +
+               "| 3. List Manufacturers                                        |\n" +
+               "| 4. Add Manufacturer                                          |\n" +
+               "| 5. List Suppliers                                            |\n" +
+               "| 6. Add Supplier                                              |\n" +
+               "| 7. LogOut                                                    |\n" +
+               border;
+    }
+
+    @Override
+    public String displayManagerMenu() {
+        return "Mechanics cannot access the Manager menu.";
+    }
+		
 }
 
 

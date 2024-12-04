@@ -96,7 +96,7 @@ public class BayMotors {
         System.out.println("\n--- Dashboard ---");
 
         if (Roles.MANAGER.equals(employee.getRole())) {
-            displayManagerOptions();
+            displayManagerOptions(employee);
         } else if (Roles.MECHANIC.equals(employee.getRole())) {
             displayMechanicOptions(employee);
         } else {
@@ -105,51 +105,11 @@ public class BayMotors {
         return;
     }
     
-    public static void displayManagerMenu() {
-        String border = "+---------------------------------------------------------------+";
-        System.out.println("\n" + border);
-        System.out.println("|                   Manager Operations Menu                    |");
-        System.out.println(border);
-        System.out.println("| 1. List Mechanics                                             |");
-        System.out.println("| 2. Add Mechanic                                               |");
-        System.out.println("| 3. List Customers                                             |");
-        System.out.println("| 4. Add Customer                                               |");
-        System.out.println("| 5. Register Customer                                          |");
-        System.out.println("| 6. List Vehicles                                              |");
-        System.out.println("| 7. Log Vehicle                                                |");
-        System.out.println("| 8. List Tasks                                                 |");
-        System.out.println("| 9. Add Task                                                   |");
-        System.out.println("| 10. Notify Customers                                          |");
-        System.out.println("| 11. List Manufacturers                                        |");
-        System.out.println("| 12. Add Manufacturer                                          |");
-        System.out.println("| 13. List Suppliers                                            |");
-        System.out.println("| 14. Add Supplier                                              |");
-        System.out.println("| 15. LogOut                                                    |");
-        System.out.println(border);
-    }
-    
-    public static void displayMechanicMenu() {
-    	String border = "+---------------------------------------------------------------+";
-        System.out.println("\n" + border);
-        System.out.println("|                   Mechanic Operations Menu                    |");
-        System.out.println(border);
-        System.out.println("| 1. List Tasks                                                |");
-        System.out.println("| 2. Complete Task                                             |");
-        System.out.println("| 3. List Manufacturers                                        |");
-        System.out.println("| 4. Add Manufacturer                                          |");
-        System.out.println("| 5. List Suppliers                                            |");
-        System.out.println("| 6. Add Supplier                                              |");
-        System.out.println("| 7. LogOut                                                    |");
-        System.out.println(border);
-
-    }
-
-    
-    public static void displayManagerOptions() {
+    public static void displayManagerOptions(Employee loggedInEmployee) {
 	    Scanner sc = new Scanner(System.in);
 
 	    while (true) { // Loop to allow multiple operations until logout
-	    	displayManagerMenu();
+	    	System.out.println(loggedInEmployee.displayManagerMenu());
 	    	
 	    	int userOption = -1; // Initialize with an invalid option
 	    	boolean validInput = false; // Flag to track if input is valid
@@ -176,6 +136,7 @@ public class BayMotors {
 		                System.out.println("\n--- Mechanics ---");
 		                for(Employee employee:employees) {
 		                	System.out.println(employee);
+		                	System.out.println(employee.performRoleSpecificTask());
 		                }
 	                } catch (Exception e) {
 	                	System.out.println("An error occurred during list of Mehanics: " + e.getMessage());
@@ -660,11 +621,11 @@ public class BayMotors {
 	    
     }    
 	   
-    public static void displayMechanicOptions(Employee employee) {
+    public static void displayMechanicOptions(Employee loggedInEmployee) {
     	
     	Scanner sc = new Scanner(System.in);
     	while(true) {
-    		displayMechanicMenu();
+    		System.out.println(loggedInEmployee.displayMechanicMenu());
     		
     		int mechanicOption = -1;
     		boolean validInput = false;
@@ -688,7 +649,7 @@ public class BayMotors {
     				//List Tasks
     				System.out.println("\n--- List of Tasks ---");
     				try {
-    					TaskService.getTasksByMechanic(employee.getId()).forEach(System.out::println);
+    					TaskService.getTasksByMechanic(loggedInEmployee.getId()).forEach(System.out::println);
     				} catch(Exception e) {
 	            		System.out.println("An error occurred while listing the tasks: " + e.getMessage());
 	            	}
@@ -698,7 +659,7 @@ public class BayMotors {
     				//Complete Task
     				try {
     					System.out.println("\n--- Complete an Existing Task ---");
-        				List<Task> tasks = TaskService.getTasksByMechanic(employee.getId());
+        				List<Task> tasks = TaskService.getTasksByMechanic(loggedInEmployee.getId());
         				if (tasks.isEmpty()) {
         			        System.out.println("No Pending tasks available to complete.");
         			        break;
