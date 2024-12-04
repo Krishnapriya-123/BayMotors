@@ -114,7 +114,10 @@ public class CustomerDao {
             throw new Exception("Unable to update customer.", e);
         }
     }
-	
-	
+    
+    public static void resetCustomers(List<Customer> newCustomers) {
+        customers.clear();
+        customers.addAll(newCustomers);
+    }
 }
 

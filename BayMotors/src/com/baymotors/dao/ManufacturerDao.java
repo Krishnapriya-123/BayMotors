@@ -42,4 +42,10 @@ public class ManufacturerDao {
             throw new Exception("Unable to add manufacturer.", e);
         }
     }
+    
+    public static void resetManufacturers(List<Manufacturer> newManufacturers) {
+        manufacturers.clear();
+        manufacturers.addAll(newManufacturers);
+    }
+
 }

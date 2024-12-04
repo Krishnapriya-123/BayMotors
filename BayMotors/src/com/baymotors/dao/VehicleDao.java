@@ -44,4 +44,9 @@ public class VehicleDao {
             throw new Exception("Unable to add vehicle.", e);
         }
     }
+    
+    public static void resetVehicles(List<Vehicle> newVehicles) {
+        vehicles.clear();
+        vehicles.addAll(newVehicles);
+    }
 }

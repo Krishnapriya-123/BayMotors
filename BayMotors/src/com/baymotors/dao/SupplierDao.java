@@ -42,4 +42,10 @@ public class SupplierDao {
             throw new Exception("Unable to add supplier.", e);
         }
     }
+    
+    public static void resetSuppliers(List<Supplier> newSuppliers) {
+        suppliers.clear();
+        suppliers.addAll(newSuppliers);
+    }
+
 }

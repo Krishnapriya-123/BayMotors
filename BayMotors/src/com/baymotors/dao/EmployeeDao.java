@@ -101,6 +101,12 @@ public class EmployeeDao {
             throw new Exception("Unable to add employee.", e);
         }
     }
+    
+    public static void resetEmployees(List<Employee> newEmployees) {
+        employees.clear();
+        employees.addAll(newEmployees);
+    }
+
 	
 }
 

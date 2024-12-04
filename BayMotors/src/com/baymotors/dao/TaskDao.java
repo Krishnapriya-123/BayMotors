@@ -75,4 +75,10 @@ public class TaskDao {
             throw new Exception("Unable to mark task as completed.", e);
         }
     }
+    
+    public static void resetTasks(List<Task> newTasks) {
+        tasks.clear();
+        tasks.addAll(newTasks);
+    }
+
 }
