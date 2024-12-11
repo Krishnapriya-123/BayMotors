@@ -19,7 +19,7 @@ public class Mechanic extends Employee {
     }
 	
 	@Override
-    public String displayMechanicMenu() {
+    public String displayMenu() {
         String border = "+---------------------------------------------------------------+";
         return "\n" + border + "\n" +
                "|                   Mechanic Operations Menu                    |\n" +
@@ -32,11 +32,6 @@ public class Mechanic extends Employee {
                "| 6. Add Supplier                                              |\n" +
                "| 7. LogOut                                                    |\n" +
                border;
-    }
-
-    @Override
-    public String displayManagerMenu() {
-        return "Mechanics cannot access the Manager menu.";
     }
 		
 }

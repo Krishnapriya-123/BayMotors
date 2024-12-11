@@ -109,7 +109,7 @@ public class BayMotors {
 	    Scanner sc = new Scanner(System.in);
 
 	    while (true) { // Loop to allow multiple operations until logout
-	    	System.out.println(loggedInEmployee.displayManagerMenu());
+	    	System.out.println(loggedInEmployee.displayMenu());
 	    	
 	    	int userOption = -1; // Initialize with an invalid option
 	    	boolean validInput = false; // Flag to track if input is valid
@@ -625,7 +625,7 @@ public class BayMotors {
     	
     	Scanner sc = new Scanner(System.in);
     	while(true) {
-    		System.out.println(loggedInEmployee.displayMechanicMenu());
+    		System.out.println(loggedInEmployee.displayMenu());
     		
     		int mechanicOption = -1;
     		boolean validInput = false;

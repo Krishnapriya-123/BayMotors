@@ -30,8 +30,7 @@ public abstract class Employee {
 	}
     
     // Abstract methods
-    public abstract String displayMechanicMenu();
-    public abstract String displayManagerMenu();
+    public abstract String displayMenu(); // Displays the menu based on the role
     public abstract String performRoleSpecificTask(); // Returns a message about the task performed
     
     // Shared methods
